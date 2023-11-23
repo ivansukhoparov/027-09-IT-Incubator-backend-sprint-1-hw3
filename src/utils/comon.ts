@@ -1,5 +1,7 @@
+let counter = 0
 export const createNewId = (descriptor:string) => {
-    return (new Date())+descriptor;
+    counter ++;
+    return ( +(new Date()))*Math.random() + descriptor + counter;
 }
 
 export const mongoUri = "mongodb://0.0.0.0:27017"
