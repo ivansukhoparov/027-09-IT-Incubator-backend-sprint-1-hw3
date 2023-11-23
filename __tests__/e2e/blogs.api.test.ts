@@ -272,7 +272,7 @@ describe(routerName, () => {
     it("17 - delete with invalid authorization should return 401", async () => {
 
         await request(app)
-            .delete(routerName + "-101")
+            .delete(routerName + testBlog2.id)
             .auth("odmin","qwerty")
             .expect(401);
 
