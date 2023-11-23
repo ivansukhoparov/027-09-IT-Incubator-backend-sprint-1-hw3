@@ -23,17 +23,19 @@ export class PostsRepository {
 
     // create new post
     static createPost(data: CreatePostDto) {
+        const createdAt = new Date();
         const blogName = BlogsRepository.getBlogById(data.blogId)
         if (blogName) {
             const newPost: PostType = {
                 ...data,
                 id: createNewId("b"),
-                blogName: blogName.name
+                blogName: blogName.name,
+                createdAt: createdAt.toISOString()
             }
             db.posts.push(newPost);
             return newPost.id;
-        }else{
-          return null
+        } else {
+            return null
         }
     }
 

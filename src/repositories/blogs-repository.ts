@@ -22,9 +22,12 @@ export class BlogsRepository {
 
     // create new blog
     static createBlog(data: CreateBlogDto) {
+        const createdAt = new Date();
         const newBlog: BlogType = {
             ...data,
-            id: createNewId("b")
+            id: createNewId("b"),
+            createdAt: createdAt.toISOString(),
+            isMembership: false
         }
         db.blogs.push(newBlog);
         return newBlog.id;
