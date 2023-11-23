@@ -2,8 +2,8 @@ export const createNewId = (descriptor:string) => {
     return (new Date())+descriptor;
 }
 
-export const mongoUri = "mongodb://localhost:27017"
-export const port:80 = 80;
+export const mongoUri = "mongodb://0.0.0.0:27017"
+export const port:number = 5010;
 
 export const HTTP_STATUSES = {
     OK_200: 200,

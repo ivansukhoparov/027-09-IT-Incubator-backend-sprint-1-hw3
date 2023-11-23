@@ -2,12 +2,8 @@ import {app} from "./settings";
 import {port} from "./utils/comon";
 import {runDB} from "./db/db";
 
-app.listen(port, async () => {
-    console.log(`app start on port ${port}`);
-    console.log(`open in browser http://localhost:${port}`);
-})
 
-const appStart =async ()=>{
+const appStart = async () => {
     await runDB();
     app.listen(port, async () => {
         console.log(`app start on port ${port}`);
