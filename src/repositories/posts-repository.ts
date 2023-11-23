@@ -64,7 +64,7 @@ export class PostsRepository {
     //delete post
     static deletePost(id: string) {
         const postIndex = db.posts.findIndex(post => post.id === id)
-        if (postIndex > 0) {
+        if (postIndex >= 0) {
             db.posts.splice(postIndex, 1);
             return true;
         } else {
