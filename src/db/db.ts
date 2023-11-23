@@ -34,7 +34,9 @@ export const db: DBType = {
         id: "string",
         name: "string",
         description: "string",
-        websiteUrl: "string"
+        websiteUrl: "string",
+        createdAt:"string",
+        isMembership:false
     }],
     posts: [{
         id: "string",
@@ -42,6 +44,7 @@ export const db: DBType = {
         shortDescription: "string",
         content: "string",
         blogId: "string",
+        createdAt:"string",
         blogName: "string"
     }]
 }
