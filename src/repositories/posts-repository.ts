@@ -41,18 +41,18 @@ export class PostsRepository {
 
     // update existing post
     static updatePost(id: string, data: UpdatePostDto) {
-        const blogName = BlogsRepository.getBlogById(data.blogId)
+        const blog = BlogsRepository.getBlogById(data.blogId)
         const postIndex = db.posts.findIndex(post => post.id === id)
         const post = db.posts[postIndex];
 
-        if (post && blogName) {
+        if (post && blog) {
             const newPost = {
                 ...post,
                 title: data.title,
                 shortDescription: data.shortDescription,
                 content: data.content,
                 blogId: data.blogId,
-                blogName: blogName.name
+                blogName: blog.name
             }
             db.posts.splice(postIndex, 1, newPost);
             return true;
