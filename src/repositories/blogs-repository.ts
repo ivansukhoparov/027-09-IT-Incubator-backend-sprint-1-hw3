@@ -54,7 +54,7 @@ export class BlogsRepository {
     //delete blog
     static deleteBlog(id: string) {
         const blogIndex = db.blogs.findIndex(blog => blog.id === id)
-        if (blogIndex > 0) {
+        if (blogIndex >= 0) {
             db.blogs.splice(blogIndex, 1);
             return true;
         } else {
