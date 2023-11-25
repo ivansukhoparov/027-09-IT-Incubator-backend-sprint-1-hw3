@@ -1,3 +1,5 @@
+import {ObjectId} from "mongodb";
+
 export type OutputBlogType ={
     id: string
     name: string

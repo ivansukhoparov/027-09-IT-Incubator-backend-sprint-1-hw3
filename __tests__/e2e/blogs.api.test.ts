@@ -1,6 +1,7 @@
 //import request from 'supertest';
 import request = require("supertest");
 import {app} from "../../src/settings";
+import {blogCollection} from "../../src/db/db-collections";
 
 
 const routerName = "/blogs/";
@@ -8,7 +9,7 @@ const routerName = "/blogs/";
 describe(routerName, () => {
     // clear DB before testing
     beforeAll(async () => {
-        await request(app).delete("/testing/all-data");
+        await blogCollection.deleteMany({});
     })
 
     it("01 - should be return 200 and empty array", async () => {
@@ -288,15 +289,14 @@ describe(routerName, () => {
 
         expect(res.body.length).toBe(1);
 
-        console.log(res.body)
     })
 
     it("19 - delete with valid ID to all blogs should return 204 and empty array", async () => {
-        console.log(testBlog1.id)
+
         const path = routerName + testBlog1.id
-        console.log(path)
+
         const obj = await request(app).get(routerName + testBlog1.id)
-        console.log(obj.body)
+
 
         await request(app)
             .delete(routerName + testBlog1.id)

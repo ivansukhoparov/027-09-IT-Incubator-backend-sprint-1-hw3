@@ -1,9 +1,9 @@
 import {VideoType} from "../types/videos/output";
-import {BlogType} from "./blogs/output";
+import {OutputBlogType} from "./blogs/output";
 import {PostType} from "./posts/output";
 
 export type DBType = {
     videos: VideoType[],
-    blogs: BlogType[],
+    blogs: OutputBlogType[],
     posts: PostType[]
 }

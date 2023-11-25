@@ -4,6 +4,8 @@ import {mongoUri} from "../utils/comon";
 
 export const client = new MongoClient(mongoUri)
 
+
+
 export const runDB = async () => {
     try {
         // Connect to server

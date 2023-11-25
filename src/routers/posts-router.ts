@@ -14,7 +14,7 @@ postsRouter.get("/", async (req: Request, res: Response) => {
     res.status(HTTP_STATUSES.OK_200).json(posts);
 })
 
-postsRouter.get("/:id", async(req: RequestWithParams<Params>, res: Response) => {
+postsRouter.get("/:id", async (req: RequestWithParams<Params>, res: Response) => {
     const post = await PostsRepository.getPostById(req.params.id);
     if (post) {
         res.status(HTTP_STATUSES.OK_200).json(post);
@@ -24,7 +24,7 @@ postsRouter.get("/:id", async(req: RequestWithParams<Params>, res: Response) => 
     }
 })
 
-postsRouter.post('/',basicAuthorizationMiddleware,validationPostsChains(),inputValidationMiddleware, async(req: RequestWithBody<CreatePostDto>, res: Response) => {
+postsRouter.post('/', basicAuthorizationMiddleware, validationPostsChains(), inputValidationMiddleware, async (req: RequestWithBody<CreatePostDto>, res: Response) => {
     const creatData = req.body;
     const postID = await PostsRepository.createPost(creatData);
     if (postID) {
@@ -38,7 +38,7 @@ postsRouter.post('/',basicAuthorizationMiddleware,validationPostsChains(),inputV
     res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
 })
 
-postsRouter.put("/:id",basicAuthorizationMiddleware,validationPostsChains(),inputValidationMiddleware, async(req: RequestWithBodyAndParams<Params, UpdatePostDto>, res: Response) => {
+postsRouter.put("/:id", basicAuthorizationMiddleware, validationPostsChains(), inputValidationMiddleware, async (req: RequestWithBodyAndParams<Params, UpdatePostDto>, res: Response) => {
     const updateData = req.body;
     const isUpdated = await PostsRepository.updatePost(req.params.id, updateData);
     if (isUpdated) {
@@ -48,11 +48,8 @@ postsRouter.put("/:id",basicAuthorizationMiddleware,validationPostsChains(),inpu
     res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
 })
 
-postsRouter.delete("/:id", basicAuthorizationMiddleware, async(req: RequestWithParams<Params>, res: Response) => {
+postsRouter.delete("/:id", basicAuthorizationMiddleware, async (req: RequestWithParams<Params>, res: Response) => {
     const isDeleted = await PostsRepository.deletePost(req.params.id);
-    if (isDeleted) {
-        res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
-        return;
-    }
-    res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+    if (isDeleted) res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+    else res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
 })
