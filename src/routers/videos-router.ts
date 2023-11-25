@@ -2,7 +2,8 @@ import {Router,Request, Response} from "express";
 import {ErrorType, Params, RequestWithBody, RequestWithBodyAndParams, RequestWithParams} from "../types/common";
 import {AvailableResolutions, VideoType} from "../types/videos/output";
 import {CreateVideoDto, UpdateVideoDto} from "../types/videos/input";
-import {db} from "../db/db";
+
+import {db} from "../db/memory-db";
 
 
 export const videosRouter = Router()

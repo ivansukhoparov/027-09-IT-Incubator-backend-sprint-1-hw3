@@ -1,9 +1,9 @@
 import {BlogType} from "../types/blogs/output";
-import {db} from "../db/db";
 import {CreateBlogDto, UpdateBlogDto} from "../types/blogs/input";
 import {createNewId} from "../utils/comon";
+import {db} from "../db/memory-db";
 
-export class BlogsRepository {
+export class BlogsInMemoryRepository {
 
     // return all blogs from database
     static getAllBlogs(): BlogType[] {

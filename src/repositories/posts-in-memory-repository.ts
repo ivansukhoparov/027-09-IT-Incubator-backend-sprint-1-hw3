@@ -1,10 +1,10 @@
-import {db} from "../db/db";
 import {createNewId} from "../utils/comon";
 import {PostType} from "../types/posts/output";
 import {CreatePostDto, UpdatePostDto} from "../types/posts/input";
-import {BlogsRepository} from "./blogs-repository";
+import {BlogsInMemoryRepository} from "./blogs-in-memory-repository";
+import {db} from "../db/memory-db";
 
-export class PostsRepository {
+export class PostsInMemoryRepository {
 
     // return all posts from database
     static getAllPosts(): PostType[] {
@@ -24,7 +24,7 @@ export class PostsRepository {
     // create new post
     static createPost(data: CreatePostDto) {
         const createdAt = new Date();
-        const blogName = BlogsRepository.getBlogById(data.blogId)
+        const blogName = BlogsInMemoryRepository.getBlogById(data.blogId)
         if (blogName) {
             const newPost: PostType = {
                 ...data,
@@ -41,7 +41,7 @@ export class PostsRepository {
 
     // update existing post
     static updatePost(id: string, data: UpdatePostDto) {
-        const blog = BlogsRepository.getBlogById(data.blogId)
+        const blog = BlogsInMemoryRepository.getBlogById(data.blogId)
         const postIndex = db.posts.findIndex(post => post.id === id)
         const post = db.posts[postIndex];
 

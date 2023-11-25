@@ -1,10 +1,17 @@
+import dotenv from "dotenv";
+
+dotenv.config();
+
 let counter = 0
+
 export const createNewId = (descriptor:string) => {
     counter ++;
     return ( +(new Date()))*Math.random() + descriptor + counter;
 }
 
-export const mongoUri = "mongodb://0.0.0.0:27017"
+export const mongoUri = process.env.MONGO_URL || "mongodb://0.0.0.0:27017"
+
+console.log(mongoUri)
 export const port:number = 5010;
 
 export const HTTP_STATUSES = {
