@@ -4,8 +4,8 @@ import {PostType} from "../types/posts/output";
 import {VideoType} from "../types/videos/output";
 
 
-const db = client.db("node-blogs");
+export const dbBlogs = client.db("node-blogs");
 
-export const blogCollection = db.collection<BlogType>("blogs");
-export const postCollection = db.collection<PostType>("post");
-export const videosCollection = db.collection<VideoType>("videos");
+export const blogCollection = dbBlogs.collection<BlogType>("blogs");
+export const postCollection = dbBlogs.collection<PostType>("post");
+export const videosCollection = dbBlogs.collection<VideoType>("videos");

@@ -15,11 +15,16 @@ export class BlogsRepository {
 
     // return one blog with given id
     static async getBlogById(id: string): Promise<OutputBlogType | null> {
-        const blog: WithId<BlogType> | null = await blogCollection.findOne({_id: new ObjectId(id)});
-        if (!blog) {
+        try{
+            const blog: WithId<BlogType> | null = await blogCollection.findOne({_id: new ObjectId(id)});
+            if (!blog) {
+                return null;
+            }
+            return blogMapper(blog)
+        }catch (err){
             return null;
         }
-        return blogMapper(blog)
+
     }
 
     // create new blog
@@ -54,9 +59,14 @@ export class BlogsRepository {
 
     //delete blog
     static async deleteBlog(id: string) {
-        const result = await client.db("node-blogs").collection("blogs").deleteOne({_id: new ObjectId(id)});
+        try{
+            const result = await client.db("node-blogs").collection("blogs").deleteOne({_id: new ObjectId(id)});
 
-        return result.deletedCount === 1;
+            return result.deletedCount === 1;
+        }catch (err){
+            return false;
+        }
+
     }
 }
 

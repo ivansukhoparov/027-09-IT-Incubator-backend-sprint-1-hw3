@@ -18,11 +18,16 @@ export class PostsRepository {
 
     // return one post with given id
     static async  getPostById(id: string):Promise<OutputPostType|null> {
-        const post:WithId<PostType>|null = await postCollection.findOne({_id:new ObjectId(id)});
-        if (!post){
+        try {
+            const post:WithId<PostType>|null = await postCollection.findOne({_id:new ObjectId(id)});
+            if (!post){
+                return null;
+            }
+            return postMapper(post);
+        }catch (err){
             return null;
         }
-            return postMapper(post);
+
 
     }
 
@@ -61,8 +66,13 @@ export class PostsRepository {
 
     //delete post
     static async deletePost(id: string) {
-        const result = await postCollection.deleteOne({_id:new ObjectId(id)});
-        return result.deletedCount === 1;
+        try{
+            const result = await postCollection.deleteOne({_id:new ObjectId(id)});
+            return result.deletedCount === 1;
+        }catch (err){
+            return false
+        }
+
     }
 }
 

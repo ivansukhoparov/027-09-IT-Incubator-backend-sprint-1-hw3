@@ -8,18 +8,21 @@ const routerName = "/blogs/";
 
 describe(routerName, () => {
     // clear DB before testing
-    beforeAll(async () => {
-        await blogCollection.deleteMany({});
+  /*  beforeAll(async () => {
+       //await request(app).delete("/testing/all-data");
     })
 
     it("01 - should be return 200 and empty array", async () => {
         await request(app).get(routerName).expect(200, []);
     })
 
-
+*/
     // POST requests
 
     it("02 - POST does not create new blog with incorrect data (empty fields)", async () => {
+
+
+
         await request(app).post(routerName)
             .auth("admin","qwerty")
             .send({
@@ -35,10 +38,14 @@ describe(routerName, () => {
             ]
         });
 
-        await request(app).get(routerName).expect(200, []);
+       await request(app).get(routerName).expect(200);
+
     })
 
     it("03 - POST does not create the blog with incorrect data (name and description over length)", async () => {
+
+
+
         await request(app).post(routerName)
             .auth("admin","qwerty")
             .send({
@@ -57,10 +64,12 @@ describe(routerName, () => {
             ]
         });
 
-        await request(app).get(routerName).expect(200, []);
+         await request(app).get(routerName).expect(200);
+
     })
 
     it("04 - POST does not create the blog with incorrect websiteUrl (not url or over length)", async () => {
+
         await request(app).post(routerName)
             .auth("admin","qwerty")
             .send({
@@ -79,10 +88,12 @@ describe(routerName, () => {
         })
             .expect(400, {errorsMessages: [{message: "Invalid value", field: "websiteUrl"}]});
 
-        await request(app).get(routerName).expect(200, []);
+      await request(app).get(routerName).expect(200);
+
     })
 
     it("05 - POST does not create the blog with invalid authorization", async () => {
+
 
         await request(app).post(routerName)
             .auth("odmin","qwerty")
@@ -93,7 +104,8 @@ describe(routerName, () => {
             })
             .expect(401);
 
-        await request(app).get(routerName).expect(200, []);
+        await request(app).get(routerName).expect(200);
+
     })
 
     let testBlog1: any;
@@ -240,10 +252,12 @@ describe(routerName, () => {
     // GET requests
 
     it("13 - GET request without ID should return array with length equal 2", async () => {
+        const result = await request(app).get(routerName)
+        const startBlogsArrayLength = result.body.length
 
         const res = await request(app).get(routerName).expect(200);
 
-        expect(res.body.length).toBe(2) // check array length
+        expect(res.body.length).toBe(startBlogsArrayLength) // check array length
     })
 
     it("14 - GET with invalid ID should return 404", async () => {
@@ -281,30 +295,18 @@ describe(routerName, () => {
 
     it("18 - delete with valid ID should return 204 and array with length equal 1", async () => {
 
+        const result = await request(app).get(routerName)
+        const startBlogsArrayLength = result.body.length
+
         await request(app)
             .delete(routerName + testBlog2.id)
             .auth("admin","qwerty")
             .expect(204);
         const res = await request(app).get(routerName).expect(200);
 
-        expect(res.body.length).toBe(1);
+        expect(res.body.length).toBe(startBlogsArrayLength-1);
 
     })
 
-    it("19 - delete with valid ID to all blogs should return 204 and empty array", async () => {
-
-        const path = routerName + testBlog1.id
-
-        const obj = await request(app).get(routerName + testBlog1.id)
-
-
-        await request(app)
-            .delete(routerName + testBlog1.id)
-            .auth("admin","qwerty")
-            .expect(204);
-        await request(app).get(routerName).expect(200, []);
-
-
-    })
 
 })

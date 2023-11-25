@@ -54,7 +54,7 @@ describe(routerName, () => {
         const res = await request(app).post("/blogs/")
             .auth("admin","qwerty")
             .send({
-                "name": "Blog 1",
+                "name": "Blog 1 posts",
                 "description": "blog about nothing",
                 "websiteUrl": "http://www.test.com"
             })
@@ -67,7 +67,7 @@ describe(routerName, () => {
         const res = await request(app).post("/blogs/")
             .auth("admin","qwerty")
             .send({
-                "name": "Blog 2",
+                "name": "Blog 2 posts",
                 "description": "blog about nothing",
                 "websiteUrl": "http://www.test.com"
             })
@@ -366,15 +366,14 @@ describe(routerName, () => {
 
         expect(res.body.length).toBe(1);
 
-        console.log(res.body)
     })
 
     it(" - delete with valid ID to all posts should return 204 and empty array", async () => {
-        console.log(testPost1.id)
+
         const path = routerName + testPost1.id
-        console.log(path)
+
         const obj = await request(app).get(routerName + testPost1.id)
-        console.log(obj.body)
+
 
         await request(app)
             .delete(routerName + testPost1.id)

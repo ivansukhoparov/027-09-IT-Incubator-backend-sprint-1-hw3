@@ -11,7 +11,6 @@ export const createNewId = (descriptor:string) => {
 
 export const mongoUri = process.env.MONGO_URL || "mongodb://0.0.0.0:27017"
 
-console.log(mongoUri)
 export const port:number = 5010;
 
 export const HTTP_STATUSES = {

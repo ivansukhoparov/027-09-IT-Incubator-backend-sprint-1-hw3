@@ -8,6 +8,6 @@ const validatePostContent = body("content").trim().isString().notEmpty().isLengt
 const validateBlogID = body("blogId").isString().notEmpty().custom(async (value) => {
     const blog = await BlogsRepository.getBlogById(value)
     return blog!.id === value
-});
+}).withMessage("Invalid value");
 
 export const validationPostsChains = () => [validatePostTitle, validatePostDescription, validatePostContent, validateBlogID];
