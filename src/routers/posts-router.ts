@@ -2,20 +2,20 @@ import {Router, Request, Response} from "express";
 import {Params, RequestWithBody, RequestWithBodyAndParams, RequestWithParams} from "../types/common";
 import {basicAuthorizationMiddleware} from "../middlewares/auth/auth-middleware";
 import {HTTP_STATUSES} from "../utils/comon";
-import {PostsInMemoryRepository} from "../repositories/posts-in-memory-repository";
+import {PostsRepository} from "../repositories/posts-repository";
 import {CreatePostDto, UpdatePostDto} from "../types/posts/input";
 import {validationPostsChains} from "../middlewares/validators/posts-validators";
 import {inputValidationMiddleware} from "../middlewares/validators/input-validation-middleware";
 
 export const postsRouter = Router();
 
-postsRouter.get("/", (req: Request, res: Response) => {
-    const posts = PostsInMemoryRepository.getAllPosts();
+postsRouter.get("/", async (req: Request, res: Response) => {
+    const posts = await PostsRepository.getAllPosts();
     res.status(HTTP_STATUSES.OK_200).json(posts);
 })
 
-postsRouter.get("/:id", (req: RequestWithParams<Params>, res: Response) => {
-    const post = PostsInMemoryRepository.getPostById(req.params.id);
+postsRouter.get("/:id", async(req: RequestWithParams<Params>, res: Response) => {
+    const post = await PostsRepository.getPostById(req.params.id);
     if (post) {
         res.status(HTTP_STATUSES.OK_200).json(post);
         return
@@ -24,11 +24,11 @@ postsRouter.get("/:id", (req: RequestWithParams<Params>, res: Response) => {
     }
 })
 
-postsRouter.post('/',basicAuthorizationMiddleware,validationPostsChains(),inputValidationMiddleware, (req: RequestWithBody<CreatePostDto>, res: Response) => {
+postsRouter.post('/',basicAuthorizationMiddleware,validationPostsChains(),inputValidationMiddleware, async(req: RequestWithBody<CreatePostDto>, res: Response) => {
     const creatData = req.body;
-    const postID = PostsInMemoryRepository.createPost(creatData);
+    const postID = await PostsRepository.createPost(creatData);
     if (postID) {
-        const newPost = PostsInMemoryRepository.getPostById(postID);
+        const newPost = await PostsRepository.getPostById(postID);
 
         if (newPost) {
             res.status(HTTP_STATUSES.CREATED_201).json(newPost);
@@ -38,9 +38,9 @@ postsRouter.post('/',basicAuthorizationMiddleware,validationPostsChains(),inputV
     res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
 })
 
-postsRouter.put("/:id",basicAuthorizationMiddleware,validationPostsChains(),inputValidationMiddleware, (req: RequestWithBodyAndParams<Params, UpdatePostDto>, res: Response) => {
+postsRouter.put("/:id",basicAuthorizationMiddleware,validationPostsChains(),inputValidationMiddleware, async(req: RequestWithBodyAndParams<Params, UpdatePostDto>, res: Response) => {
     const updateData = req.body;
-    const isUpdated = PostsInMemoryRepository.updatePost(req.params.id, updateData);
+    const isUpdated = await PostsRepository.updatePost(req.params.id, updateData);
     if (isUpdated) {
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
         return
@@ -48,8 +48,8 @@ postsRouter.put("/:id",basicAuthorizationMiddleware,validationPostsChains(),inpu
     res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
 })
 
-postsRouter.delete("/:id", basicAuthorizationMiddleware, (req: RequestWithParams<Params>, res: Response) => {
-    const isDeleted = PostsInMemoryRepository.deletePost(req.params.id);
+postsRouter.delete("/:id", basicAuthorizationMiddleware, async(req: RequestWithParams<Params>, res: Response) => {
+    const isDeleted = await PostsRepository.deletePost(req.params.id);
     if (isDeleted) {
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
         return;
