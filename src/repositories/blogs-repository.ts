@@ -1,4 +1,4 @@
-import {BlogType, OutputBlogType} from "../types/blogs/output";
+import {BlogType, BlogOutputType} from "../types/blogs/output";
 import {CreateBlogDto, UpdateBlogDto} from "../types/blogs/input";
 import {client} from "../db/db";
 import {ObjectId, WithId} from "mongodb";
@@ -14,7 +14,7 @@ export class BlogsRepository {
     };
 
     // return one blog with given id
-    static async getBlogById(id: string): Promise<OutputBlogType | null> {
+    static async getBlogById(id: string): Promise<BlogOutputType | null> {
         try{
             const blog: WithId<BlogType> | null = await blogCollection.findOne({_id: new ObjectId(id)});
             if (!blog) {

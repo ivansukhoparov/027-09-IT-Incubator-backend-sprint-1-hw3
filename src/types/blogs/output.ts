@@ -1,6 +1,14 @@
-import {ObjectId} from "mongodb";
 
-export type OutputBlogType ={
+
+export type BlogViewModelType={
+     pagesCount : number
+     page : number
+     pageSize : number
+     totalCount : number
+     items :BlogOutputType[]
+}
+
+export type BlogOutputType ={
     id: string
     name: string
     description: string
