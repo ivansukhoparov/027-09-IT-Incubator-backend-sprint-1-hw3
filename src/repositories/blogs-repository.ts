@@ -43,7 +43,7 @@ export class BlogsRepository {
     // update existing blog
     static async updateBlog(id: string, data: UpdateBlogDto) {
 
-        const result = await client.db("node-blogs").collection("blogs").updateOne({_id: new ObjectId(id)},
+        const result = await blogCollection.updateOne({_id: new ObjectId(id)},
             {
                 $set:
                     {
@@ -60,7 +60,7 @@ export class BlogsRepository {
     //delete blog
     static async deleteBlog(id: string) {
         try{
-            const result = await client.db("node-blogs").collection("blogs").deleteOne({_id: new ObjectId(id)});
+            const result = await blogCollection.deleteOne({_id: new ObjectId(id)});
 
             return result.deletedCount === 1;
         }catch (err){
