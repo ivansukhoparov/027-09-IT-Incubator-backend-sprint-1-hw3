@@ -19,7 +19,7 @@
   "scripts": {
     "dev": "yarn nodemon --inspect dist/index.js",
     "watch": "tsc -w",
-    "jest": "jest"
+    "jest": "jest --runInBand --forceExit"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
