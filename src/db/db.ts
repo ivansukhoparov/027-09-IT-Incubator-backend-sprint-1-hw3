@@ -14,6 +14,7 @@ export const runDB = async () => {
         await client.db("admin").command({ping: 1});
         console.log("Mongo server connection successful");
     }catch  {
+        await client.close()
         console.log("Mongo server connection failed")
     }
 }
