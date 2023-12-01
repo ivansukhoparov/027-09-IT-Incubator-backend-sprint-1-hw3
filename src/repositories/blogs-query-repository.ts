@@ -4,11 +4,11 @@ import {client} from "../db/db";
 import {ObjectId, WithId} from "mongodb";
 import {blogMapper} from "../types/blogs/mapper";
 import {blogCollection} from "../db/db-collections";
-import {SortDataRepositoryType, QueryDataRequestType, SearchDataRepositoryType} from "../types/common";
+import {SortBlogRepositoryType, QueryBlogRequestType, SearchBlogRepositoryType} from "../types/common";
 
 export class BlogsQueryRepository {
 
-    static async getAllBlogs(sortData: SortDataRepositoryType, searchData: SearchDataRepositoryType): Promise<BlogViewModelType> {
+    static async getAllBlogs(sortData: SortBlogRepositoryType, searchData: SearchBlogRepositoryType): Promise<BlogViewModelType> {
         let searchKey = {};
         let sortKey = {};
         let sortDirection: number;
@@ -43,6 +43,20 @@ export class BlogsQueryRepository {
             totalCount: documentsTotalCount,
             items: blogs.map(blogMapper)
         }
-    };
+    }
+
+    static async getBlogById(id: string): Promise<BlogOutputType | null> {
+        try{
+            const blog: WithId<BlogType> | null = await blogCollection.findOne({_id: new ObjectId(id)});
+            if (!blog) {
+                return null;
+            }
+            return blogMapper(blog)
+        }catch (err){
+            return null;
+        }
+    }
+
+
 }
 
