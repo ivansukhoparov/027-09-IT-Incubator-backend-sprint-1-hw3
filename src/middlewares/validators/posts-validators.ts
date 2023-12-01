@@ -11,3 +11,4 @@ const validateBlogID = body("blogId").isString().notEmpty().custom(async (value)
 }).withMessage("Invalid value");
 
 export const validationPostsChains = () => [validatePostTitle, validatePostDescription, validatePostContent, validateBlogID];
+export const validationPostsChainsNoBlogId = () => [validatePostTitle, validatePostDescription, validatePostContent];
