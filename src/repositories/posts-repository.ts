@@ -34,12 +34,12 @@ export class PostsRepository {
     // create new post
     static async createPost(data: CreatePostDto) {
         const createdAt = new Date();
-        const blogName = await BlogsRepository.getBlogById(data.blogId)
+        const blog = await BlogsRepository.getBlogById(data.blogId)
 
-        if (blogName) {
+        if (blog) {
             const newPost: PostType = {
                 ...data,
-                blogName: blogName.name,
+                blogName: blog.name,
                 createdAt: createdAt.toISOString()
             }
             const result = await postCollection.insertOne(newPost)
