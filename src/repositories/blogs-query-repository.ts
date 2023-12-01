@@ -1,10 +1,15 @@
 import {BlogType, BlogOutputType, BlogViewModelType} from "../types/blogs/output";
-import {CreateBlogDto, UpdateBlogDto} from "../types/blogs/input";
+import {
+    CreateBlogDto,
+    QueryBlogRequestType,
+    SearchBlogRepositoryType,
+    SortBlogRepositoryType,
+    UpdateBlogDto
+} from "../types/blogs/input";
 import {client} from "../db/db";
 import {ObjectId, WithId} from "mongodb";
 import {blogMapper} from "../types/blogs/mapper";
 import {blogCollection} from "../db/db-collections";
-import {SortBlogRepositoryType, QueryBlogRequestType, SearchBlogRepositoryType} from "../types/common";
 
 export class BlogsQueryRepository {
 

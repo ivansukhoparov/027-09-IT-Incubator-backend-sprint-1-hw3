@@ -5,9 +5,15 @@ import {
     RequestWithBody,
     RequestWithBodyAndParams,
     RequestWithParams,
-    RequestWithSearchTerms, SortBlogRepositoryType, QueryBlogRequestType, SearchBlogRepositoryType
+    RequestWithSearchTerms
 } from "../types/common";
-import {CreateBlogDto, UpdateBlogDto} from "../types/blogs/input";
+import {
+    CreateBlogDto,
+    QueryBlogRequestType,
+    SearchBlogRepositoryType,
+    SortBlogRepositoryType,
+    UpdateBlogDto
+} from "../types/blogs/input";
 import {inputValidationMiddleware} from "../middlewares/validators/input-validation-middleware";
 import {validationBlogsChains} from "../middlewares/validators/blogs-validators";
 import {basicAuthorizationMiddleware} from "../middlewares/auth/auth-middleware";

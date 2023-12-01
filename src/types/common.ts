@@ -8,24 +8,6 @@ export type RequestWithSearchTerms<T> =Request<{}, {}, {}, T>
 export type Params ={
     id: string
 }
-export type QueryDataRequestType = {
-    searchNameTerm?:string|null
-    sortBy?:string
-    sortDirection?: "asc"|"desc"
-    pageNumber?:number
-    pageSize?:number
-}
-export type SortDataRepositoryType = {
-    sortBy:string
-    sortDirection: "asc"|"desc"
-    pageNumber:number
-    pageSize:number
-}
-export type SearchDataRepositoryType = {
-    searchNameTerm:string|null
-}
-
-
 
 export type ErrorType = {
     errorsMessages:ErrorsMessageType[]
