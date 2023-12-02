@@ -42,27 +42,6 @@ export class BlogsRepository {
 
     }
 
-    static async createPostToBlog(blogId: string, createData: CreatePostDto) {
-        const createdAt = new Date();
-        const blog = await BlogsRepository.getBlogById(blogId)
-
-        if (blog) {
-            const newPost: PostType = {
-                title: createData.title,
-                shortDescription: createData.shortDescription,
-                content: createData.content,
-                blogId: blogId,
-                blogName: blog.name,
-                createdAt: createdAt.toISOString()
-            }
-            const result = await postCollection.insertOne(newPost);
-            const post:PostOutputType|null = await PostsRepository.getPostById(result.insertedId.toString());
-            return post;
-        } else {
-            return null
-        }
-    }
-
     // update existing blog
     static async updateBlog(id: string, data: UpdateBlogDto) {
 
