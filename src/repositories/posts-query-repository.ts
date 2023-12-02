@@ -16,7 +16,7 @@ export class PostsQueryRepository {
         if (blogId) searchKey = {blogId: blogId};
 
         // calculate limits for DB request
-        const documentsTotalCount = await postCollection.countDocuments({searchKey}); // Receive total count of blogs
+        const documentsTotalCount = await postCollection.countDocuments(searchKey); // Receive total count of blogs
         const pageCount = Math.ceil(documentsTotalCount / sortData.pageSize); // Calculate total pages count according to page size
         const skippedDocuments = (sortData.pageNumber - 1) * sortData.pageSize;
 
@@ -33,7 +33,7 @@ export class PostsQueryRepository {
         else sortKey = {createdAt: sortDirection};
 
         // Get documents from DB
-        const posts: WithId<PostType>[] = await postCollection.find({searchKey}).sort(sortKey).skip(skippedDocuments).limit(sortData.pageSize).toArray();
+        const posts: WithId<PostType>[] = await postCollection.find(searchKey).sort(sortKey).skip(skippedDocuments).limit(sortData.pageSize).toArray();
 
         return {
             pagesCount: pageCount,
