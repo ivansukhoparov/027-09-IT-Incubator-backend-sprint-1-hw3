@@ -22,6 +22,8 @@ import {BlogsQueryRepository} from "../repositories/blogs-query-repository";
 import {validationPostsChains, validationPostsChainsNoBlogId} from "../middlewares/validators/posts-validators";
 import {CreatePostDto, QueryPostRequestType, SortPostRepositoryType} from "../types/posts/input";
 import {PostsQueryRepository} from "../repositories/posts-query-repository";
+import {PostsRepository} from "../repositories/posts-repository";
+import {PostOutputType} from "../types/posts/output";
 
 
 export const blogsRouter = Router();
@@ -41,7 +43,7 @@ blogsRouter.get("/", async (req: RequestWithSearchTerms<QueryBlogRequestType>, r
     }
 
     const blogs = await BlogsQueryRepository.getAllBlogs(sortData, searchData);
-    if (blogs.items.length<1){
+    if (blogs.items.length < 1) {
         res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
         return
     }
@@ -60,15 +62,15 @@ blogsRouter.get("/:id", async (req: RequestWithParams<Params>, res: Response) =>
 
 blogsRouter.get("/:id/posts", async (req: RequestWithSearchTermsAndParams<Params, QueryPostRequestType>, res: Response) => {
 
-     const sortData: SortPostRepositoryType = {
+    const sortData: SortPostRepositoryType = {
         sortBy: req.query.sortBy || "createdAt",
         sortDirection: req.query.sortDirection || "desc",
         pageNumber: req.query.pageNumber || 1,
         pageSize: req.query.pageSize || 10
     }
 
-    const posts = await PostsQueryRepository.getAllPosts(sortData, req.params.id, );
-    if (posts.items.length<1){
+    const posts = await PostsQueryRepository.getAllPosts(sortData, req.params.id,);
+    if (posts.items.length < 1) {
         res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
         return
     }
@@ -91,20 +93,22 @@ blogsRouter.post('/',
         res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
     })
 
-blogsRouter.post("/:id/post"),
+blogsRouter.post("/:id/posts",
     basicAuthorizationMiddleware,
     validationPostsChainsNoBlogId(),
     inputValidationMiddleware,
     async (req: RequestWithBodyAndParams<Params, CreatePostDto>, res: Response) => {
         const blogId = req.params.id;
         const createData = req.body;
-        const createdPost = await BlogsRepository.createPostToBlog(blogId,createData);
-        if (!createdPost) {
+        const newPostId = await PostsRepository.createPostToBlog(blogId, createData);
+
+        if (!newPostId) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
             return
         }
+        const createdPost = await PostsQueryRepository.getPostById(newPostId);
         res.status(HTTP_STATUSES.CREATED_201).json(createdPost)
-    }
+    })
 
 blogsRouter.put("/:id",
     basicAuthorizationMiddleware,
