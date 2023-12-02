@@ -93,7 +93,7 @@ blogsRouter.post('/',
         res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
     })
 
-blogsRouter.post("/:id/post"),
+blogsRouter.post("/:id/posts"),
     basicAuthorizationMiddleware,
     validationPostsChainsNoBlogId(),
     inputValidationMiddleware,
