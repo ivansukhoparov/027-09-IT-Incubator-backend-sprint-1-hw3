@@ -22,6 +22,8 @@ import {BlogsQueryRepository} from "../repositories/blogs-query-repository";
 import {validationPostsChains, validationPostsChainsNoBlogId} from "../middlewares/validators/posts-validators";
 import {CreatePostDto, QueryPostRequestType, SortPostRepositoryType} from "../types/posts/input";
 import {PostsQueryRepository} from "../repositories/posts-query-repository";
+import {PostsRepository} from "../repositories/posts-repository";
+import {PostOutputType} from "../types/posts/output";
 
 
 export const blogsRouter = Router();
@@ -98,11 +100,13 @@ blogsRouter.post("/:id/post"),
     async (req: RequestWithBodyAndParams<Params, CreatePostDto>, res: Response) => {
         const blogId = req.params.id;
         const createData = req.body;
-        const createdPost = await BlogsRepository.createPostToBlog(blogId,createData);
-        if (!createdPost) {
-            res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+        const newPostId = await PostsRepository.createPostToBlog(blogId,createData);
+
+        if (!newPostId) {
+                        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
             return
         }
+        const createdPost = await PostsQueryRepository.getPostById(newPostId);
         res.status(HTTP_STATUSES.CREATED_201).json(createdPost)
     }
 
