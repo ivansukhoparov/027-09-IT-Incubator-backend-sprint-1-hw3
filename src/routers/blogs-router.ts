@@ -5,7 +5,7 @@ import {
     RequestWithBody,
     RequestWithBodyAndParams,
     RequestWithParams,
-    RequestWithSearchTerms
+    RequestWithSearchTerms, RequestWithSearchTermsAndParams
 } from "../types/common";
 import {
     CreateBlogDto,
@@ -20,7 +20,8 @@ import {basicAuthorizationMiddleware} from "../middlewares/auth/auth-middleware"
 import {HTTP_STATUSES} from "../utils/comon";
 import {BlogsQueryRepository} from "../repositories/blogs-query-repository";
 import {validationPostsChains, validationPostsChainsNoBlogId} from "../middlewares/validators/posts-validators";
-import {CreatePostDto} from "../types/posts/input";
+import {CreatePostDto, QueryPostRequestType, SortPostRepositoryType} from "../types/posts/input";
+import {PostsQueryRepository} from "../repositories/posts-query-repository";
 
 
 export const blogsRouter = Router();
@@ -40,6 +41,10 @@ blogsRouter.get("/", async (req: RequestWithSearchTerms<QueryBlogRequestType>, r
     }
 
     const blogs = await BlogsQueryRepository.getAllBlogs(sortData, searchData);
+    if (blogs.items.length<1){
+        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+        return
+    }
     res.status(HTTP_STATUSES.OK_200).json(blogs);
 })
 
@@ -51,6 +56,24 @@ blogsRouter.get("/:id", async (req: RequestWithParams<Params>, res: Response) =>
     } else {
         res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
     }
+})
+
+blogsRouter.get("/:id/posts", async (req: RequestWithSearchTermsAndParams<Params, QueryPostRequestType>, res: Response) => {
+
+     const sortData: SortPostRepositoryType = {
+        sortBy: req.query.sortBy || "createdAt",
+        sortDirection: req.query.sortDirection || "desc",
+        pageNumber: req.query.pageNumber || 1,
+        pageSize: req.query.pageSize || 10
+    }
+
+    const posts = await PostsQueryRepository.getAllPosts(sortData, req.params.id, );
+    if (posts.items.length<1){
+        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+        return
+    }
+    res.status(HTTP_STATUSES.OK_200).json(posts);
+
 })
 
 blogsRouter.post('/',
