@@ -1,21 +1,36 @@
 import {Router, Request, Response} from "express";
-import {Params, RequestWithBody, RequestWithBodyAndParams, RequestWithParams} from "../types/common";
+import {
+    Params,
+    RequestWithBody,
+    RequestWithBodyAndParams,
+    RequestWithParams,
+    RequestWithSearchTerms
+} from "../types/common";
 import {basicAuthorizationMiddleware} from "../middlewares/auth/auth-middleware";
 import {HTTP_STATUSES} from "../utils/comon";
 import {PostsRepository} from "../repositories/posts-repository";
-import {CreatePostDto, UpdatePostDto} from "../types/posts/input";
+import {CreatePostDto, QueryPostRequestType, SortPostRepositoryType, UpdatePostDto} from "../types/posts/input";
 import {validationPostsChains} from "../middlewares/validators/posts-validators";
 import {inputValidationMiddleware} from "../middlewares/validators/input-validation-middleware";
+import {PostsQueryRepository} from "../repositories/posts-query-repository";
 
 export const postsRouter = Router();
 
-postsRouter.get("/", async (req: Request, res: Response) => {
-    const posts = await PostsRepository.getAllPosts();
+postsRouter.get("/", async (req: RequestWithSearchTerms<QueryPostRequestType>, res: Response) => {
+
+    const sortData: SortPostRepositoryType = {
+        sortBy: req.query.sortBy || "createdAt",
+        sortDirection: req.query.sortDirection || "desc",
+        pageNumber: req.query.pageNumber || 1,
+        pageSize: req.query.pageSize || 10
+    }
+
+    const posts = await PostsQueryRepository.getAllPosts(sortData);
     res.status(HTTP_STATUSES.OK_200).json(posts);
 })
 
 postsRouter.get("/:id", async (req: RequestWithParams<Params>, res: Response) => {
-    const post = await PostsRepository.getPostById(req.params.id);
+    const post = await PostsQueryRepository.getPostById(req.params.id);
     if (post) {
         res.status(HTTP_STATUSES.OK_200).json(post);
         return

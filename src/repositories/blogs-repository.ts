@@ -3,7 +3,10 @@ import {CreateBlogDto, UpdateBlogDto} from "../types/blogs/input";
 import {client} from "../db/db";
 import {ObjectId, WithId} from "mongodb";
 import {blogMapper} from "../types/blogs/mapper";
-import {blogCollection} from "../db/db-collections";
+import {blogCollection, postCollection} from "../db/db-collections";
+import {CreatePostDto} from "../types/posts/input";
+import {PostOutputType, PostType} from "../types/posts/output";
+import {PostsRepository} from "./posts-repository";
 
 export class BlogsRepository {
 
@@ -13,18 +16,17 @@ export class BlogsRepository {
         return blogs.map(blogMapper)
     };
 
-    // return one blog with given id
+    // return one blog by id
     static async getBlogById(id: string): Promise<BlogOutputType | null> {
-        try{
+        try {
             const blog: WithId<BlogType> | null = await blogCollection.findOne({_id: new ObjectId(id)});
             if (!blog) {
                 return null;
             }
             return blogMapper(blog)
-        }catch (err){
+        } catch (err) {
             return null;
         }
-
     }
 
     // create new blog
@@ -38,6 +40,27 @@ export class BlogsRepository {
         const result = await blogCollection.insertOne(newBlog)
         return result.insertedId.toString();
 
+    }
+
+    static async createPostToBlog(blogId: string, createData: CreatePostDto) {
+        const createdAt = new Date();
+        const blog = await BlogsRepository.getBlogById(blogId)
+
+        if (blog) {
+            const newPost: PostType = {
+                title: createData.title,
+                shortDescription: createData.shortDescription,
+                content: createData.content,
+                blogId: blogId,
+                blogName: blog.name,
+                createdAt: createdAt.toISOString()
+            }
+            const result = await postCollection.insertOne(newPost);
+            const post:PostOutputType|null = await PostsRepository.getPostById(result.insertedId.toString());
+            return post;
+        } else {
+            return null
+        }
     }
 
     // update existing blog
@@ -59,11 +82,11 @@ export class BlogsRepository {
 
     //delete blog
     static async deleteBlog(id: string) {
-        try{
+        try {
             const result = await blogCollection.deleteOne({_id: new ObjectId(id)});
 
             return result.deletedCount === 1;
-        }catch (err){
+        } catch (err) {
             return false;
         }
 

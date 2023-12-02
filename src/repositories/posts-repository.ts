@@ -1,5 +1,5 @@
 import {createNewId} from "../utils/comon";
-import {OutputPostType, PostType} from "../types/posts/output";
+import {PostOutputType, PostType} from "../types/posts/output";
 import {CreatePostDto, UpdatePostDto} from "../types/posts/input";
 import {postCollection} from "../db/db-collections";
 import {postMapper} from "../types/posts/mapper";
@@ -11,13 +11,13 @@ import {BlogType} from "../types/blogs/output";
 export class PostsRepository {
 
     // return all posts from database
-    static async  getAllPosts(): Promise<OutputPostType[]> {
+    static async  getAllPosts(): Promise<PostOutputType[]> {
         const posts:WithId<PostType>[] = await postCollection.find({}).toArray() ;
         return posts.map(postMapper);
     };
 
     // return one post with given id
-    static async  getPostById(id: string):Promise<OutputPostType|null> {
+    static async  getPostById(id: string):Promise<PostOutputType|null> {
         try {
             const post:WithId<PostType>|null = await postCollection.findOne({_id:new ObjectId(id)});
             if (!post){
@@ -34,12 +34,12 @@ export class PostsRepository {
     // create new post
     static async createPost(data: CreatePostDto) {
         const createdAt = new Date();
-        const blogName = await BlogsRepository.getBlogById(data.blogId)
+        const blog = await BlogsRepository.getBlogById(data.blogId)
 
-        if (blogName) {
+        if (blog) {
             const newPost: PostType = {
                 ...data,
-                blogName: blogName.name,
+                blogName: blog.name,
                 createdAt: createdAt.toISOString()
             }
             const result = await postCollection.insertOne(newPost)
