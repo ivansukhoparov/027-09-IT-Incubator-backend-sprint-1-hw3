@@ -23,8 +23,8 @@ export class BlogsQueryRepository {
 
         // calculate limits for DB request
         const documentsTotalCount = await blogCollection.countDocuments(searchKey); // Receive total count of blogs
-        const pageCount = Math.ceil(documentsTotalCount / sortData.pageSize); // Calculate total pages count according to page size
-        const skippedDocuments = (sortData.pageNumber - 1) * sortData.pageSize; // Calculate count of skipped docs before requested page
+        const pageCount = Math.ceil(documentsTotalCount / +sortData.pageSize); // Calculate total pages count according to page size
+        const skippedDocuments = (+sortData.pageNumber - 1) * +sortData.pageSize; // Calculate count of skipped docs before requested page
 
         // check if sortDirection is "desc" assign sortDirection value -1, else assign 1
         if (sortData.sortDirection === "desc") sortDirection = -1;
@@ -38,7 +38,7 @@ export class BlogsQueryRepository {
         else sortKey = {createdAt: sortDirection};
 
         // Get documents from DB
-        const blogs: WithId<BlogType>[] = await blogCollection.find(searchKey).sort(sortKey).skip(skippedDocuments).limit(sortData.pageSize).toArray();
+        const blogs: WithId<BlogType>[] = await blogCollection.find(searchKey).sort(sortKey).skip(+skippedDocuments).limit(+sortData.pageSize).toArray();
 
         return {
             pagesCount: pageCount,
