@@ -5,7 +5,7 @@ import {ObjectId, WithId} from "mongodb";
 import {blogMapper} from "../types/blogs/mapper";
 import {blogCollection, postCollection} from "../db/db-collections";
 import {CreatePostDto} from "../types/posts/input";
-import {OutputPostType, PostType} from "../types/posts/output";
+import {PostOutputType, PostType} from "../types/posts/output";
 import {PostsRepository} from "./posts-repository";
 
 export class BlogsRepository {
@@ -56,7 +56,7 @@ export class BlogsRepository {
                 createdAt: createdAt.toISOString()
             }
             const result = await postCollection.insertOne(newPost);
-            const post:OutputPostType|null = await PostsRepository.getPostById(result.insertedId.toString());
+            const post:PostOutputType|null = await PostsRepository.getPostById(result.insertedId.toString());
             return post;
         } else {
             return null
