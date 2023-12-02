@@ -19,7 +19,7 @@ export class BlogsQueryRepository {
         let sortDirection: number;
 
         // check if have searchNameTerm create search key
-        if (searchData.searchNameTerm) searchKey = {name: {$regex: searchData.searchNameTerm}};
+        if (searchData.searchNameTerm) searchKey = {name: {$regex: searchData.searchNameTerm,$options:"i"}};
 
         // calculate limits for DB request
         const documentsTotalCount = await blogCollection.countDocuments(searchKey); // Receive total count of blogs
