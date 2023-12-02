@@ -37,8 +37,8 @@ export class PostsQueryRepository {
 
         return {
             pagesCount: pageCount,
-            page: sortData.pageNumber,
-            pageSize: sortData.pageSize,
+            page: +sortData.pageNumber,
+            pageSize: +sortData.pageSize,
             totalCount: documentsTotalCount,
             items: posts.map(postMapper)
         };

@@ -42,8 +42,8 @@ export class BlogsQueryRepository {
 
         return {
             pagesCount: pageCount,
-            page: sortData.pageNumber,
-            pageSize: sortData.pageSize,
+            page: +sortData.pageNumber,
+            pageSize: +sortData.pageSize,
             totalCount: documentsTotalCount,
             items: blogs.map(blogMapper)
         }
