@@ -43,7 +43,7 @@ blogsRouter.get("/", async (req: RequestWithSearchTerms<QueryBlogRequestType>, r
     }
 
     const blogs = await BlogsQueryRepository.getAllBlogs(sortData, searchData);
-    if (blogs.items.length < 1) {
+    if (!blogs) {
         res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
         return
     }
